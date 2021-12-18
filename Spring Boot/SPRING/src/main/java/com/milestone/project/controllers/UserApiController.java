@@ -56,16 +56,14 @@ public class UserApiController {
         return dto;
     }
     //Path to create a user with the passed parameters
-    @PostMapping(path = "/create")
+    @CrossOrigin
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @ResponseBody
     public DTO<User> create(
-            @RequestParam String username,
-            @RequestParam String firstname,
-            @RequestParam String lastname,
-            @RequestParam String email,
-            @RequestParam String password
+            @RequestBody User body
     ){
         //Create a new user with given parameters
-        User user = new User(username, firstname, lastname, email, password);
+        User user = new User(body.getUsername(), body.getFirstname(), body.getLastname(), body.getEmail(), body.getPassword());
         //Calling the User Service and passing the new user to be created
         userService.create(user);
         //Sending back a message with the created user's information

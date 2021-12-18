@@ -34,19 +34,20 @@ public class NoteApiController {
         return dto;
     }
     //Path to update the note with the parameters
-    @PostMapping(path = "/update/{id}")
+    @CrossOrigin
+    @RequestMapping(value = "/edit", method = RequestMethod.POST)
+    @ResponseBody
     public DTO<Note> update(
-            @PathVariable("id")Long id,
-            @RequestParam String content
+            @RequestBody Note data
     ){
         //Calling the Note Service to update the note
-        noteService.update(id, content);
+        noteService.update(data.getId(), data.getContent());
         //Sending back a message with the updated note's id
-        DTO<Note> dto = new DTO(200, "Note Updated", id);
+        DTO<Note> dto = new DTO(200, "Note Updated", data.getId());
         return dto;
     }
     //Path to delete a note by id
-    @PostMapping(path = "/delete/{id}")
+    @GetMapping(path = "/delete/{id}")
     public DTO<Note> delete(@PathVariable("id") Long id){
         //Calling Note Service to delete the note by id
         noteService.delete(id);
@@ -55,13 +56,14 @@ public class NoteApiController {
         return dto;
     }
     //Path to create a note with the passed parameters
-    @PostMapping(path = "/create")
+    @CrossOrigin
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @ResponseBody
     public DTO<Note> create(
-            @RequestParam String content,
-            @RequestParam Long userId
+            @RequestBody Note data
     ){
         //Create a new note with given parameters
-        Note note = new Note(content, userId);
+        Note note = new Note(data.getContent(), data.getUserId());
         //Calling the Note Service and passing the new Note to be created
         noteService.create(note);
         //Sending back a message with the created note's information
